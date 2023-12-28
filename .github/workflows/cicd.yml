@@ -33,4 +33,4 @@ jobs:
       - name: Run pytest
         run: python -m pytest
       - run: sam build --use-container
-      # - run: sam deploy --stack-name dietgoals-sam --no-confirm-changeset --no-fail-on-empty-changeset --resolve-s3 --capabilities CAPABILITY_IAM --parameter-overrides "CertificateARN=${{ env.tls_cert_arn }}"
+      - run: sam deploy --stack-name dietgoals-sam --no-confirm-changeset --no-fail-on-empty-changeset --resolve-s3 --capabilities CAPABILITY_IAM --parameter-overrides "CertificateARN=${{ secrets.TLS_CERT_ARN }}"
