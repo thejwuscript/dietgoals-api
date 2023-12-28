@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  CertificateARN:
+    Type: String
+    Description: TLS or SSL certificate ARN
+
+Resources:
+  # API Gateway
+
+  DietGoalsApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Domain:
+        DomainName: api.dietgoals.site
+        CertificateArn: !Ref CertificateARN
+      DisableExecuteApiEndpoint: true
+      Cors:
+        AllowMethods: "'POST, GET, HEAD, PUT, DELETE'"
+        AllowHeaders: "'*'"
+        AllowOrigin: "'*'"
+        MaxAge: "'600'"
+      MethodSettings:
+        - HttpMethod: "*"
+          ResourcePath: "/*"
+          ThrottlingBurstLimit: 10
+          ThrottlingRateLimit: 5
+
+  # Lambda function
+
+  VisitCountFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/visit_count
+      Description: Serverless backend for DietGoals
+      MemorySize: 128
+      Timeout: 10
+      Handler: handler.lambda_handler
+      Runtime: python3.10
+      EventInvokeConfig:
+        MaximumEventAgeInSeconds: 21600
+        MaximumRetryAttempts: 2
+      PackageType: Zip
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DietGoalsDB
+      SnapStart:
+        ApplyOn: None
+      Environment:
+        Variables:
+          DatabaseTable: !Ref DietGoalsDB
+      Events:
+        PostResource:
+          Type: Api
+          Properties:
+            Path: /visitCount
+            Method: POST
+            RestApiId: !Ref DietGoalsApi
+
+  # DynamoDB
+
+  DietGoalsDB:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
