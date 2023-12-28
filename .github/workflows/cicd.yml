@@ -1,4 +1,4 @@
-Nmae: CICD
+name: CICD
 
 on:
   push:
