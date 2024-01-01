@@ -54,26 +54,24 @@ def lambda_handler(event, context):
             else:
                 count = increment_visit_count(table)
 
-
             return {
                 "statusCode": 200,
                 "body": json.dumps({"visitCount": str(count)}),
                 "headers": {
                     "Content-Type": "application/json",
                     "Set-Cookie": "visited=true; Max-Age=1707109200; Path=/",
-                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Origin": "https://dietgoals.site",
+                    "Access-Control-Allow-Credentials": "true",
                 },
             }
         else:
             return {
                 "statusCode": 400,
-                "body": json.dumps({'message': "Unsupported method call"}),
+                "body": json.dumps({"message": "Unsupported method call"}),
                 "headers": {
                     "Content-Type": "application/json",
                 },
             }
     except Exception as e:
         print(e)
-        return {
-            "statusCode": 500
-        }
+        return {"statusCode": 500}
