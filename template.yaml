@@ -18,9 +18,10 @@ Resources:
         CertificateArn: !Ref CertificateARN
       DisableExecuteApiEndpoint: true
       Cors:
-        AllowMethods: "'POST, GET, HEAD, PUT, DELETE'"
-        AllowHeaders: "'*'"
-        AllowOrigin: "'*'"
+        AllowMethods: "'POST, GET, HEAD, PUT, DELETE, OPTIONS'"
+        AllowHeaders: "'Content-Type'"
+        AllowOrigin: "'https://dietgoals.site'"
+        AllowCredentials: true
         MaxAge: "'600'"
       MethodSettings:
         - HttpMethod: "*"

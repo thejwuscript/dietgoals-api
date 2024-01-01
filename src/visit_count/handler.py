@@ -60,7 +60,9 @@ def lambda_handler(event, context):
                 "headers": {
                     "Content-Type": "application/json",
                     "Set-Cookie": "visited=true; Max-Age=1707109200; Path=/",
+                    "Access-Control-Allow-Headers" : "Content-Type",
                     "Access-Control-Allow-Origin": "https://dietgoals.site",
+                    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
                     "Access-Control-Allow-Credentials": "true",
                 },
             }
