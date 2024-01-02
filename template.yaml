@@ -16,6 +16,7 @@ Resources:
       Domain:
         DomainName: api.dietgoals.site
         CertificateArn: !Ref CertificateARN
+        EndpointConfiguration: EDGE
       DisableExecuteApiEndpoint: true
       Cors:
         AllowMethods: "'POST, GET, HEAD, PUT, DELETE, OPTIONS'"
